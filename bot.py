@@ -22,7 +22,8 @@ if not BOT_TOKEN or not DEEPSEEK_API_KEY:
 # 频道分类 ID 配置 (需替换为真实纯数字 ID)
 TICKET_CATEGORIES = [1315994632185712671, 1318149535159156736, 1491315604672479276, 1286636114605510666, 1491315968692060272, 1491315997863313510] # 6个工单分类目录 ID
 CHAT_CHANNEL_IDS = [1283782240903630869, 1283781888078516254, 933542219577712644, 1012022716238401676, 1440283130794872944, 1283782168044114071, 1394192746356539543, 1286635317947793439]
-ADMIN_USER_ID = 1480405006040567808             # 遇到麻烦时需要被 @ 的管理员 ID
+ADMIN_USER_ID = 1521069963849240596             # 遇到麻烦时需要被 @ 的管理员 ID (lagofastjustine)
+SUPPORT_TICKET_CHANNEL_ID = 1095422143031951422  # 「📩」support-ticket 频道 ID（用于社区引导用户开 ticket）
 
 STAFF_ROLES = ['Admin', 'Staff', 'Developer', 'Customer Support', 'Marketing Staff']
 DB_PATH = 'support_system.db'
@@ -573,7 +574,7 @@ async def on_message(message):
                             reply_status='replied')
 
             elif intent == "NEED_HUMAN":
-                await safe_reply(message, "Please click #「✏」support-ticket to open a ticket, we can help you!")
+                await safe_reply(message, f"Please click <#{SUPPORT_TICKET_CHANNEL_ID}> to open a ticket, we can help you!")
                 combined_name = f"{channel_name}-{message.author.display_name}"
                 chat_ticket_id = f"CHAT_{channel_id}_{message.id}"
                 save_ticket(user_id=message.author.id, message_id=message.id, 
