@@ -1,0 +1,25 @@
+# 环境与密钥
+.env
+
+# 数据库
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# 日志
+*.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# CSV 数据文件（含用户隐私）
+*.csv
