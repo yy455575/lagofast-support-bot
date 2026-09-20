@@ -23,3 +23,7 @@ venv/
 
 # CSV 数据文件（含用户隐私）
 *.csv
+
+# 本地旧版备份（不上传）
+bot_old_backup.py
+*_backup.py
