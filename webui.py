@@ -103,7 +103,7 @@ if page == "🎫 工单系统 (Tickets)":
                     c1, c2, c3 = st.columns(3)
                     
                     with c1:
-                        if st.button("🚀 仅下发回复", key=f"s_{tab_name}_{row['id']}", type="secondary", use_container_width=True):
+                        if st.button("🚀 仅下发回复", key=f"s_{tab_name}_{row['id']}", type="secondary", width="stretch"):
                             if has_channel_id and reply_text:
                                 conn.execute("INSERT INTO cmd_queue (channel_id, message_content) VALUES (?, ?)", (row['discord_channel_id'], f"👨‍💻 **Staff:** {reply_text}"))
                                 conn.execute("UPDATE tickets SET status='in_progress', reply_status='replied', updated_at=CURRENT_TIMESTAMP WHERE id=?", (row['id'],))
@@ -111,14 +111,14 @@ if page == "🎫 工单系统 (Tickets)":
                             else: st.warning("ID无效或内容为空")
                             
                     with c2:
-                        if st.button("✅ 手动结单", key=f"cl_{tab_name}_{row['id']}", type="primary", use_container_width=True):
+                        if st.button("✅ 手动结单", key=f"cl_{tab_name}_{row['id']}", type="primary", width="stretch"):
                             if has_channel_id and reply_text:
                                 conn.execute("INSERT INTO cmd_queue (channel_id, message_content) VALUES (?, ?)", (row['discord_channel_id'], f"👨‍💻 **Staff:** {reply_text}"))
                             conn.execute("UPDATE tickets SET status='resolved', reply_status='replied', updated_at=CURRENT_TIMESTAMP WHERE id=?", (row['id'],))
                             conn.commit(); st.success("已结单，将存入已结单列表"); st.rerun()
                                 
                     with c3:
-                        if st.button("🗑️ 远程销毁频道", key=f"del_{tab_name}_{row['id']}", type="primary", use_container_width=True):
+                        if st.button("🗑️ 远程销毁频道", key=f"del_{tab_name}_{row['id']}", type="primary", width="stretch"):
                             if has_channel_id:
                                 conn.execute("INSERT INTO cmd_queue (channel_id, message_content) VALUES (?, ?)", (row['discord_channel_id'], "$Delete"))
                                 conn.execute("UPDATE tickets SET status='resolved', updated_at=CURRENT_TIMESTAMP WHERE id=?", (row['id'],))
@@ -144,7 +144,7 @@ elif page == "💬 社区监控 (Chats)":
         # 顶部：信息量波动图
         df_trend = df_chats.set_index('display_time').resample('1h').size().reset_index(name='消息量')
         fig = px.line(df_trend, x='display_time', y='消息量', title="近期待处理社区提问波动曲线 (小时级)", markers=True)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
         
         st.divider()
         tab_chat_alert, tab_chat_res = st.tabs(["🔴 待处理异常", "🟢 已归档预警"])
@@ -178,7 +178,7 @@ elif page == "📚 知识库管理":
     with tab_faq:
         try:
             df_faq = pd.read_sql("SELECT rowid as id, category as '分类', question_keywords as '关键词', trigger_rule as '触发规则', answer_content as '标准话术' FROM faq_library", conn)
-            st.dataframe(df_faq[['分类', '关键词', '触发规则', '标准话术']], use_container_width=True)
+            st.dataframe(df_faq[['分类', '关键词', '触发规则', '标准话术']], width="stretch")
             
             st.divider()
             if not df_faq.empty:
@@ -239,7 +239,7 @@ elif page == "📊 专业数据看板":
         df_pie = pd.read_sql("SELECT category, COUNT(*) as count FROM tickets WHERE category != ? GROUP BY category", conn, params=(COMMUNITY_CATEGORY,))
         if not df_pie.empty:
             fig = px.pie(df_pie, values='count', names='category', title="核心工单业务标签分布", hole=0.4)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
             
         # 新增：趋势图
         st.divider()
@@ -255,7 +255,7 @@ elif page == "📊 专业数据看板":
             """, conn, params=(COMMUNITY_CATEGORY,))
             if not df_trend.empty:
                 fig_trend = px.bar(df_trend, x='date', y='count', title="近 30 天工单量趋势", labels={'date': '日期', 'count': '工单数'})
-                st.plotly_chart(fig_trend, use_container_width=True)
+                st.plotly_chart(fig_trend, width="stretch")
         except Exception as e:
             st.info(f"趋势图生成失败: {e}")
     except Exception as e:
