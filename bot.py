@@ -43,7 +43,16 @@ logger.addHandler(file_handler)
 logger.addHandler(console_handler)
 
 ai_client = AsyncOpenAI(api_key=DEEPSEEK_API_KEY, base_url="https://api.deepseek.com")
-intents = discord.Intents.all()
+
+# ================= Discord 意图配置 =================
+# 注意：以下两个为【特权意图】，必须在 Discord 开发者后台显式开启：
+#   1. Message Content Intent  → 读取频道消息内容（bot 核心功能必需）
+#   2. Server Members Intent   → 读取成员角色（用于识别 Staff/Admin）
+# 开启路径：https://discord.com/developers/applications → 选择应用 → Bot → Privileged Gateway Intents
+intents = discord.Intents.default()
+intents.guilds = True            # 基础：服务器/频道信息
+intents.message_content = True   # 【特权】读取消息文本内容
+intents.members = True           # 【特权】读取成员信息（角色判断）
 client = discord.Client(intents=intents)
 
 # ================= 数据库工具函数 =================
